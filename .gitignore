@@ -1,0 +1,4 @@
+build/
+
+main/device_info.json
+main/onboarding_config.json
