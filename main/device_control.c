@@ -40,7 +40,7 @@ void temperature_events_task(void *arg)
 	QueueHandle_t queue = (QueueHandle_t)arg;
 	// Create a 1-Wire bus, using the RMT timeslot driver
 
-	float temperature_value = 30;
+	double temperature_value = 30;
 	for (;;)
 	{
 		temperature_value = temperature_value == 30 ? 25 : 30;
