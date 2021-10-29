@@ -29,13 +29,19 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stm32_hal_legacy.h>
-#include <stm32f1xx_hal.h>
-
 #include "sensirion_arch_config.h"
 #include "sensirion_sw_i2c_gpio.h"
-
+#include "driver/gpio.h"
+#include "../../main/device_control.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 /*
+ * INSTRUCTIONS
+ * ============
+ *
+ * Implement all functions where they are marked as IMPLEMENT.
+ * Follow the function specification in the comments.
+ *
  * We use the following names for the two I2C signal lines:
  * SCL for the clock line
  * SDA for the data line
@@ -49,15 +55,14 @@
  * SDA and SCL pins.
  */
 void sensirion_init_pins(void) {
-    __GPIOB_CLK_ENABLE();
-    sensirion_SDA_in();
-    sensirion_SCL_in();
+    // IMPLEMENT
 }
 
 /**
  * Release all resources initialized by sensirion_init_pins()
  */
 void sensirion_release_pins(void) {
+    // IMPLEMENT or leave empty if no resources need to be freed
 }
 
 /**
@@ -66,27 +71,27 @@ void sensirion_release_pins(void) {
  * configured to use the internal pull-up resistor.
  */
 void sensirion_SDA_in(void) {
-    GPIO_InitTypeDef GPIO_InitStruct = {
-        .Pin = GPIO_PIN_9,
-        .Mode = GPIO_MODE_INPUT,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_HIGH,
-    };
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    gpio_config_t io_conf;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	io_conf.pull_down_en = 0;
+	io_conf.pull_up_en = 1;
+	io_conf.mode = GPIO_MODE_INPUT;
+	io_conf.pin_bit_mask = 1 << GPIO_SDA;
+	gpio_config(&io_conf);
 }
 
 /**
  * Configure the SDA pin as an output and drive it low or set to logical false.
  */
 void sensirion_SDA_out(void) {
-    GPIO_InitTypeDef GPIO_InitStruct = {
-        .Pin = GPIO_PIN_9,
-        .Mode = GPIO_MODE_OUTPUT_PP,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_HIGH,
-    };
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, GPIO_PIN_RESET);
+    gpio_config_t io_conf;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	io_conf.pull_down_en = 1;
+	io_conf.pull_up_en = 0;
+	io_conf.mode = GPIO_MODE_OUTPUT;
+	io_conf.pin_bit_mask = 1 << GPIO_SDA;
+	gpio_config(&io_conf);
+    gpio_set_level(GPIO_SDA, 0);
 }
 
 /**
@@ -94,7 +99,7 @@ void sensirion_SDA_out(void) {
  * @returns 0 if the pin is low and 1 otherwise.
  */
 uint8_t sensirion_SDA_read(void) {
-    return (uint8_t)HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9) == GPIO_PIN_SET;
+    return gpio_get_level(GPIO_SDA);
 }
 
 /**
@@ -103,27 +108,28 @@ uint8_t sensirion_SDA_read(void) {
  * configured to use the internal pull-up resistor.
  */
 void sensirion_SCL_in(void) {
-    GPIO_InitTypeDef GPIO_InitStruct = {
-        .Pin = GPIO_PIN_8,
-        .Mode = GPIO_MODE_INPUT,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_FREQ_HIGH,
-    };
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+     gpio_config_t io_conf;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	io_conf.pull_down_en = 0;
+	io_conf.pull_up_en = 1;
+	io_conf.mode = GPIO_MODE_INPUT;
+	io_conf.pin_bit_mask = 1 << GPIO_SCL;
+	gpio_config(&io_conf);
+
 }
 
 /**
  * Configure the SCL pin as an output and drive it low or set to logical false.
  */
 void sensirion_SCL_out(void) {
-    GPIO_InitTypeDef GPIO_InitStruct = {
-        .Pin = GPIO_PIN_8,
-        .Mode = GPIO_MODE_OUTPUT_PP,
-        .Pull = GPIO_NOPULL,
-        .Speed = GPIO_SPEED_FREQ_HIGH,
-    };
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET);
+    gpio_config_t io_conf;
+	io_conf.intr_type = GPIO_INTR_DISABLE;
+	io_conf.pull_down_en = 1;
+	io_conf.pull_up_en = 0;
+	io_conf.mode = GPIO_MODE_OUTPUT;
+	io_conf.pin_bit_mask = 1 << GPIO_SCL;
+	gpio_config(&io_conf);
+    gpio_set_level(GPIO_SCL, 0);
 }
 
 /**
@@ -131,7 +137,7 @@ void sensirion_SCL_out(void) {
  * @returns 0 if the pin is low and 1 otherwise.
  */
 uint8_t sensirion_SCL_read(void) {
-    return (uint8_t)HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_8) == GPIO_PIN_SET;
+    return gpio_get_level(GPIO_SCL);;
 }
 
 /**
@@ -147,5 +153,5 @@ uint8_t sensirion_SCL_read(void) {
  * @param useconds the sleep time in microseconds
  */
 void sensirion_sleep_usec(uint32_t useconds) {
-    HAL_Delay(useconds / 1000 + 1);
+    vTaskDelay(useconds / (portTICK_PERIOD_MS * 1000));
 }

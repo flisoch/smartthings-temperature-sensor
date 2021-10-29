@@ -138,6 +138,11 @@ void app_main(void)
     unsigned char *device_info = (unsigned char *)device_info_start;
     unsigned int device_info_len = device_info_end - device_info_start;
     int iot_err;
+
+    iot_gpio_init();
+    xTaskCreate(app_main_task, "app_main_task", 4096, NULL, 10, NULL);
+
+
     // st_dev.h
     ctx = st_conn_init(onboarding_config, onboarding_config_len, device_info, device_info_len);
     if (ctx != NULL)
@@ -155,9 +160,7 @@ void app_main(void)
     capability_init();
 
     // device.h
-    iot_gpio_init();
     connection_start();
 
     // device input handling
-    xTaskCreate(app_main_task, "app_main_task", 4096, NULL, 10, NULL);
 }
