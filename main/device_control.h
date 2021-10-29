@@ -1,7 +1,7 @@
 
 #define GPIO_OUTPUT_MAINLED 2
 #define GPIO_SDA 4
-#define GPIO_SCL 5
+#define GPIO_SCL 14
 #define GPIO_OUTPUT_VCC 12
 #define GPIO_OUTPUT_GND 13
 
