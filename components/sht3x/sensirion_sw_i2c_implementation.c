@@ -54,15 +54,17 @@
  * Initialize all hard- and software components that are needed to set the
  * SDA and SCL pins.
  */
-void sensirion_init_pins(void) {
-    // IMPLEMENT
+void sensirion_init_pins(void)
+{
+	// IMPLEMENT
 }
 
 /**
  * Release all resources initialized by sensirion_init_pins()
  */
-void sensirion_release_pins(void) {
-    // IMPLEMENT or leave empty if no resources need to be freed
+void sensirion_release_pins(void)
+{
+	// IMPLEMENT or leave empty if no resources need to be freed
 }
 
 /**
@@ -70,8 +72,9 @@ void sensirion_release_pins(void) {
  * should be left floating, without external pull-up resistor, the input must be
  * configured to use the internal pull-up resistor.
  */
-void sensirion_SDA_in(void) {
-    gpio_config_t io_conf;
+void sensirion_SDA_in(void)
+{
+	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.pull_down_en = 0;
 	io_conf.pull_up_en = 1;
@@ -83,23 +86,25 @@ void sensirion_SDA_in(void) {
 /**
  * Configure the SDA pin as an output and drive it low or set to logical false.
  */
-void sensirion_SDA_out(void) {
-    gpio_config_t io_conf;
+void sensirion_SDA_out(void)
+{
+	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.pull_down_en = 1;
 	io_conf.pull_up_en = 0;
 	io_conf.mode = GPIO_MODE_OUTPUT;
 	io_conf.pin_bit_mask = 1 << GPIO_SDA;
 	gpio_config(&io_conf);
-    gpio_set_level(GPIO_SDA, 0);
+	gpio_set_level(GPIO_SDA, 0);
 }
 
 /**
  * Read the value of the SDA pin.
  * @returns 0 if the pin is low and 1 otherwise.
  */
-uint8_t sensirion_SDA_read(void) {
-    return gpio_get_level(GPIO_SDA);
+uint8_t sensirion_SDA_read(void)
+{
+	return gpio_get_level(GPIO_SDA);
 }
 
 /**
@@ -107,37 +112,39 @@ uint8_t sensirion_SDA_read(void) {
  * should be left floating, without external pull-up resistor, the input must be
  * configured to use the internal pull-up resistor.
  */
-void sensirion_SCL_in(void) {
-     gpio_config_t io_conf;
+void sensirion_SCL_in(void)
+{
+	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.pull_down_en = 0;
 	io_conf.pull_up_en = 1;
 	io_conf.mode = GPIO_MODE_INPUT;
 	io_conf.pin_bit_mask = 1 << GPIO_SCL;
 	gpio_config(&io_conf);
-
 }
 
 /**
  * Configure the SCL pin as an output and drive it low or set to logical false.
  */
-void sensirion_SCL_out(void) {
-    gpio_config_t io_conf;
+void sensirion_SCL_out(void)
+{
+	gpio_config_t io_conf;
 	io_conf.intr_type = GPIO_INTR_DISABLE;
 	io_conf.pull_down_en = 1;
 	io_conf.pull_up_en = 0;
 	io_conf.mode = GPIO_MODE_OUTPUT;
 	io_conf.pin_bit_mask = 1 << GPIO_SCL;
 	gpio_config(&io_conf);
-    gpio_set_level(GPIO_SCL, 0);
+	gpio_set_level(GPIO_SCL, 0);
 }
 
 /**
  * Read the value of the SCL pin.
  * @returns 0 if the pin is low and 1 otherwise.
  */
-uint8_t sensirion_SCL_read(void) {
-    return gpio_get_level(GPIO_SCL);;
+uint8_t sensirion_SCL_read(void)
+{
+	return gpio_get_level(GPIO_SCL);
 }
 
 /**
@@ -152,6 +159,8 @@ uint8_t sensirion_SCL_read(void) {
  *
  * @param useconds the sleep time in microseconds
  */
-void sensirion_sleep_usec(uint32_t useconds) {
-    vTaskDelay(useconds / (portTICK_PERIOD_MS * 1000));
+void sensirion_sleep_usec(uint32_t useconds)
+{
+	const TickType_t xDelay = 2 * useconds / (1000 * portTICK_PERIOD_MS);
+	vTaskDelay(xDelay);
 }

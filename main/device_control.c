@@ -50,6 +50,7 @@ void temperature_events_task(void *arg)
         printf("SHT sensor probing failed\n");
     }
     printf("SHT sensor probing successful\n");
+
 	double temperature_value = 30;
 	for (;;)
 	{	int32_t temperature, humidity;
@@ -59,7 +60,7 @@ void temperature_events_task(void *arg)
                    "measured humidity: %0.2f percentRH\n",
                    temperature / 1000.0f, humidity / 1000.0f);
         } else {
-            printf("error reading measurement\n");
+            printf("error reading measurement: status %d\n", ret);
         }
 		temperature_value = temperature_value == 30 ? 25 : 30;
 		xQueueSendToBack(queue, &temperature_value, 0);

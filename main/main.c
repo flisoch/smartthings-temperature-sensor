@@ -7,12 +7,12 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-
 #include "st_dev.h"
 #include "device_control.h"
 #include "caps_switch.h"
 #include "caps_temperatureMeasurement.h"
 
+#include "esp_log.h"
 // onboarding_config_start is null-terminated string
 extern const uint8_t onboarding_config_start[] asm("_binary_onboarding_config_json_start");
 extern const uint8_t onboarding_config_end[] asm("_binary_onboarding_config_json_end");
@@ -138,6 +138,8 @@ void app_main(void)
     unsigned char *device_info = (unsigned char *)device_info_start;
     unsigned int device_info_len = device_info_end - device_info_start;
     int iot_err;
+
+    esp_log_level_set("gpio", ESP_LOG_WARN);
 
     iot_gpio_init();
     xTaskCreate(app_main_task, "app_main_task", 4096, NULL, 10, NULL);
