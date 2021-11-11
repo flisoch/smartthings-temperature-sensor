@@ -1,0 +1,19 @@
+{
+  "onboardingConfig": {
+    "deviceOnboardingId": "External temp",
+    "mnId": "fcRA",
+    "setupId": "004",
+    "vid": "ST_15f8b5eb-81d8-4156-92df-2b0496a0a428",
+    "deviceTypeId": "Others",
+    "ownershipValidationTypes": [
+      "JUSTWORKS"
+    ],
+    "identityType": "ED25519",
+    "deviceIntegrationProfileKey": {
+      "id": "0e2fd607-c1b8-45ba-900a-7c5649f5bffa",
+      "majorVersion": 0,
+      "minorVersion": 1
+    },
+    "productId": "eed9809a-1dee-43ad-adae-916e04f75412"
+  }
+}
