@@ -141,8 +141,8 @@ void app_main(void)
 
     esp_log_level_set("gpio", ESP_LOG_WARN);
 
-    iot_gpio_init();
-    xTaskCreate(app_main_task, "app_main_task", 4096, NULL, 10, NULL);
+    // iot_gpio_init();
+    // xTaskCreate(app_main_task, "app_main_task", 4096, NULL, 10, NULL);
 
 
     // st_dev.h

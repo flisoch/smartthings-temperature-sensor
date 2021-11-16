@@ -7,8 +7,6 @@
 #include "sht3x.h"
 
 
-// static temperature_state_t *temperature_state;
-
 void change_switch_state(int switch_state)
 {
 	if (switch_state == SWITCH_OFF)
@@ -47,7 +45,6 @@ void temperature_events_task(void *arg)
 	QueueHandle_t queue = (QueueHandle_t)arg;
 	sensirion_i2c_init();
 			while (sht3x_probe(SHT3X_I2C_ADDR_DFLT) != STATUS_OK) {
-        printf("SHT sensor probing failed\n");
     }
     printf("SHT sensor probing successful\n");
 
